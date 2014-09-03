@@ -1,79 +1,335 @@
-<!DOCTYPE html>
 <html>
 
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Artistas : Pesquisa de imagens no Google a partir de nomes de artistas armazenados em planilha do Google Docs">
+<!--
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+  Arkanon, arkanon@lsd.org.br
+  2011/05/19 (Qui) 12:39:04 (BRS)
 
-    <title>Artistas</title>
-  </head>
+  -->
 
-  <body>
+<head>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/arkanon/artistas">View on GitHub</a>
+  <title>Base de Artistas</title>
 
-          <h1 id="project_title">Artistas</h1>
-          <h2 id="project_tagline">Pesquisa de imagens no Google a partir de nomes de artistas armazenados em planilha do Google Docs</h2>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/arkanon/artistas/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/arkanon/artistas/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+  <style>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+    body
+    {
+      font-family: sans-serif;
+      font-size: 9pt;
+    }
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+    b
+    {
+      color: red;
+    }
 
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+    a,
+    a:visited
+    {
+      text-decoration: none;
+      outline: none;
+      color: blue;
+      padding: 0 3px;
+    }
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+    a:hover
+    {
+      background: lavender;
+    }
 
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+    a img
+    {
+      margin: 2px;
+      border: 0;
+      vertical-align: middle;
+    }
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+/*
 
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+    REMOVER O FUNDO AZUL NOS ICONES
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+    a:hover img
+    {
+      border: 1px solid red;
+      background: red;
+    }
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+*/
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-    </div>
+    span.button
+    {
+      font-family: ubuntu;
+      font-size: 14.6667px;
+      display: inline-block;
+      border: 1px solid #b6b1ac;
+    }
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Artistas maintained by <a href="https://github.com/arkanon">arkanon</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
+    span.button a,
+    span.button a:hover,
+    span.button a:visited
+    {
+      cursor: default;
+      color: #4c4c4c;
+      background: #d4d0cd;
+      padding: 1px 10px;
+      display: block;
+      border-top:    1px solid white;
+      border-right:  1px solid #dcdad6;
+      border-bottom: 1px solid #dcdad6;
+      border-left:   1px solid white;
+    }
 
-    
+    span.button a:active
+    {
+      cursor: default;
+      color: #4c4c4c;
+      padding: 1px 9px 1px 11px;
+      display: block;
+      border-top:    1px solid #dcdad6;
+      border-right:  1px solid white;
+      border-bottom: 1px solid white;
+      border-left:   1px solid #dcdad6;
+    }
 
-  </body>
+    div.img
+    {
+      display: inline-block;
+      margin-top: 10px;
+      background: white;
+    }
+
+    img.img
+    {
+      border: 1px solid black;
+      margin: 5px;
+      padding: 3px;
+      background: white;
+      vertical-align: top;
+    }
+
+    #tt
+    {
+      position: absolute;
+      margin-left: 10px;
+    }
+
+  </style>
+
+
+
+  <script src="http://sandbox.scriptiny.com/tooltip/script.js"></script>
+  <script src="http://google.com/jsapi"></script>
+  <script>
+
+    /*
+
+       TOOLTIP       http://sixrevisions.com/tutorials/javascript_tutorial/create_lightweight_javascript_tooltip/
+
+       DOC           http://code.google.com/intl/pt-BR/apis/imagesearch/v1/
+       IMAGE SEARCH  http://code.google.com/apis/ajax/playground/#size_restriction
+
+       JSON          http://code.google.com/intl/pt-BR/apis/gdata/samples/spreadsheet_sample.html
+
+       DOC           http://code.google.com/intl/pt-BR/apis/spreadsheets/data/1.0
+       VISUALIZATION http://code.google.com/apis/ajax/playground/#simple_visualization
+       QUERY         http://code.google.com/apis/ajax/playground/#more_query_options
+       BUG           http://www.mail-archive.com/google-visualization-api@googlegroups.com/msg01337.html
+
+    */
+
+    google.load( 'visualization' , '1' );
+    google.load( 'search'        , '1' );
+    google.load( 'gdata'         , '1' );
+
+  </script>
+
+
+
+  <script>
+
+    var list_id   = 'output';
+    var content   = 'preview';
+    var site      = 'http://spreadsheets.google.com/'
+    var key       = '0AlS2XPJdMC8xdDVkSFluS2JZMl9qQVVPTkp4bEhIbkE';
+
+    var sheeturl  = site + 'ccc?'      + 'key=' + key;
+    var query_str = site + 'tq?pub=0&' + 'key=' + key;
+    var sheets    = site + 'feeds/worksheets/' + key + '/public/basic?alt=json-in-script&callback=listEntries';
+    var query_obj = new google.visualization.Query(query_str);
+    var view      = {}; // namespace
+
+    loadJSON(sheets);
+    google.setOnLoadCallback(sendAndDraw);
+
+
+
+    function loadJSON(url)
+    {
+      var s      = document.createElement('script');
+          s.type = 'text/javascript';
+          s.src  = url;
+      document.getElementsByTagName('head')[0].appendChild(s);
+    }
+
+
+
+    function listEntries(json)
+    /*
+       Lists the entries from the specified JSON feed
+       by creating a new 'dl' element in the DOM.
+       Each 'dt' is the title of the row, and each 'dd'
+       is the content of the row.
+    */
+    {
+      var ol = document.createElement('ol');
+      for (var i = 0; i < json.feed.entry.length; i++)
+      {
+        var entry = json.feed.entry[i];
+        var sheet = document.createTextNode(entry.title.$t);
+        var li    = document.createElement('li');
+        li.appendChild(sheet);
+        ol.appendChild(li);
+      }
+      document.getElementById('data').appendChild(ol);
+    }
+
+
+
+    function sendAndDraw()
+    {
+      query_obj.send(handleQueryResponse); // send the query with a callback function
+    }
+
+
+
+    // usage of the visualization
+    function handleQueryResponse(response)
+    {
+      if (response.isError())
+      {
+        alert('Error in query:\n\n' + response.getMessage() + '\n' + response.getDetailedMessage());
+        return;
+      }
+      data = response.getDataTable();
+      var list_obj = new view.out(document.getElementById(list_id));
+      list_obj.draw(data);
+    }
+
+
+
+    // out class constructor
+    view.out = function(container)
+    // container: the HTML element where the visualization will be rendered in
+    {
+      this.containerElement = container; // stores the container HTML element
+    }
+
+
+
+    // out.draw() method
+    view.out.prototype.draw = function(data)
+    // data: the google.visualization.DataTable to display
+    {
+      var html = [];
+      var wp_i = 'http://en.wikipedia.org/favicon.ico';
+      var go_i = 'http://www.google.com/favicon.ico';
+      for (var row = 0; row < data.getNumberOfRows(); row++)
+      {
+        var name  = data.getFormattedValue(row,0);
+        var id    =                                   name.replace(' ','-').toLowerCase();
+        var wp_u  = 'http://pt.wikipedia.org/wiki/' + name.replace(' ','_');
+        var go_u  = 'http://google.com/images?q='   + name.replace(' ','+') + '+art';
+        var code  = '<li>'
+            code += '<a href="' + wp_u + '" target="_blank"><img src="' + wp_i + '" style="margin-right:10px;" /></a>';
+            code += '<a href="' + go_u + '" target="_blank" id="' + id + '" onmouseover="preview(\'' + id + '\',\'' + name + '\')"><img src="' + go_i + '" style="margin-right:5px;" />' + name + '</a>';
+            code += '</li>';
+        html.push(code);
+      }
+      this.containerElement.innerHTML = html.join('');
+    }
+
+
+
+    function preview(id, search_keys)
+    {
+      tooltip.show('<div id="'+content+'"></div>');
+      var imageSearch = new google.search.ImageSearch();
+      imageSearch.setResultSetSize(6);
+      imageSearch.setRestriction
+      (
+        google.search.ImageSearch.RESTRICT_IMAGESIZE,
+     // google.search.ImageSearch.IMAGESIZE_MEDIUM
+        google.search.ImageSearch.IMAGESIZE_LARGE
+      );
+      imageSearch.setSearchCompleteCallback(this, searchComplete, [imageSearch]);
+      imageSearch.execute(search_keys);
+      document.getElementById(id).onmouseout = function(){tooltip.hide()};
+    }
+
+
+
+    function searchComplete(searcher)
+    {
+      if (searcher.results && searcher.results.length > 0)
+      {
+        var contentDiv = document.getElementById(content);
+        contentDiv.innerHTML = '';
+        var results = searcher.results;
+        var max_results = results.length;
+     // var max_results = 1;
+        for (var i = 0; i < max_results; i++)
+        {
+          var result = results[i];
+          var newDiv = document.createElement('div');
+          var newImg = document.createElement('img');
+          newImg.src = result.tbUrl;
+          newImg.setAttribute('class','img');
+          newDiv.setAttribute('class','img');
+          newDiv.appendChild(newImg);
+          contentDiv.appendChild(newDiv);
+        }
+      }
+    }
+
+
+
+  </script>
+
+</head>
+
+<body>
+
+<h2>Base de Artistas</h2>
+
+<p>
+  Usando as API's do Google para
+  <a href="http://code.google.com/intl/pt-BR/apis/spreadsheets/data/1.0" target="_blank">Docs (Spreadsheets)</a> e
+  <a href="http://code.google.com/intl/pt-BR/apis/imagesearch/v1/" target="_blank">Pesquisa de Imagens</a>.
+</p>
+
+<p>
+  <b>ATENÇÃO:</b> Altere os dados na
+  <span class="button"><a href="" onmouseover="this.href=sheeturl" target="_blank">Planilha</a></span> (pública) e depois 
+  <b><a href="">recarregue</a></b> essa página.
+</p>
+
+<h2>Folhas</h2>
+
+<div id="data">
+</div>
+
+<h2>Artistas</h2>
+
+<ol id="output">
+</ol>
+
+<p><b>EOF</b></p>
+
+</body>
+
 </html>
