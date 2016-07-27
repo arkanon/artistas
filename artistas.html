@@ -1,0 +1,335 @@
+<html>
+
+<!--
+
+  Arkanon, arkanon@lsd.org.br
+  2011/05/19 (Qui) 12:39:04 (BRS)
+
+  -->
+
+<head>
+
+  <title>Base de Artistas</title>
+
+  <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+
+
+
+  <style>
+
+    body
+    {
+      font-family: sans-serif;
+      font-size: 9pt;
+    }
+
+    b
+    {
+      color: red;
+    }
+
+    a,
+    a:visited
+    {
+      text-decoration: none;
+      outline: none;
+      color: blue;
+      padding: 0 3px;
+    }
+
+    a:hover
+    {
+      background: lavender;
+    }
+
+    a img
+    {
+      margin: 2px;
+      border: 0;
+      vertical-align: middle;
+    }
+
+/*
+
+    REMOVER O FUNDO AZUL NOS ICONES
+
+    a:hover img
+    {
+      border: 1px solid red;
+      background: red;
+    }
+
+*/
+
+    span.button
+    {
+      font-family: ubuntu;
+      font-size: 14.6667px;
+      display: inline-block;
+      border: 1px solid #b6b1ac;
+    }
+
+    span.button a,
+    span.button a:hover,
+    span.button a:visited
+    {
+      cursor: default;
+      color: #4c4c4c;
+      background: #d4d0cd;
+      padding: 1px 10px;
+      display: block;
+      border-top:    1px solid white;
+      border-right:  1px solid #dcdad6;
+      border-bottom: 1px solid #dcdad6;
+      border-left:   1px solid white;
+    }
+
+    span.button a:active
+    {
+      cursor: default;
+      color: #4c4c4c;
+      padding: 1px 9px 1px 11px;
+      display: block;
+      border-top:    1px solid #dcdad6;
+      border-right:  1px solid white;
+      border-bottom: 1px solid white;
+      border-left:   1px solid #dcdad6;
+    }
+
+    div.img
+    {
+      display: inline-block;
+      margin-top: 10px;
+      background: white;
+    }
+
+    img.img
+    {
+      border: 1px solid black;
+      margin: 5px;
+      padding: 3px;
+      background: white;
+      vertical-align: top;
+    }
+
+    #tt
+    {
+      position: absolute;
+      margin-left: 10px;
+    }
+
+  </style>
+
+
+
+  <script src="http://sandbox.scriptiny.com/tooltip/script.js"></script>
+  <script src="http://google.com/jsapi"></script>
+  <script>
+
+    /*
+
+       TOOLTIP       http://sixrevisions.com/tutorials/javascript_tutorial/create_lightweight_javascript_tooltip/
+
+       DOC           http://code.google.com/intl/pt-BR/apis/imagesearch/v1/
+       IMAGE SEARCH  http://code.google.com/apis/ajax/playground/#size_restriction
+
+       JSON          http://code.google.com/intl/pt-BR/apis/gdata/samples/spreadsheet_sample.html
+
+       DOC           http://code.google.com/intl/pt-BR/apis/spreadsheets/data/1.0
+       VISUALIZATION http://code.google.com/apis/ajax/playground/#simple_visualization
+       QUERY         http://code.google.com/apis/ajax/playground/#more_query_options
+       BUG           http://www.mail-archive.com/google-visualization-api@googlegroups.com/msg01337.html
+
+    */
+
+    google.load( 'visualization' , '1' );
+    google.load( 'search'        , '1' );
+    google.load( 'gdata'         , '1' );
+
+  </script>
+
+
+
+  <script>
+
+    var list_id   = 'output';
+    var content   = 'preview';
+    var site      = 'http://spreadsheets.google.com/'
+    var key       = '0AlS2XPJdMC8xdDVkSFluS2JZMl9qQVVPTkp4bEhIbkE';
+
+    var sheeturl  = site + 'ccc?'      + 'key=' + key;
+    var query_str = site + 'tq?pub=0&' + 'key=' + key;
+    var sheets    = site + 'feeds/worksheets/' + key + '/public/basic?alt=json-in-script&callback=listEntries';
+    var query_obj = new google.visualization.Query(query_str);
+    var view      = {}; // namespace
+
+    loadJSON(sheets);
+    google.setOnLoadCallback(sendAndDraw);
+
+
+
+    function loadJSON(url)
+    {
+      var s      = document.createElement('script');
+          s.type = 'text/javascript';
+          s.src  = url;
+      document.getElementsByTagName('head')[0].appendChild(s);
+    }
+
+
+
+    function listEntries(json)
+    /*
+       Lists the entries from the specified JSON feed
+       by creating a new 'dl' element in the DOM.
+       Each 'dt' is the title of the row, and each 'dd'
+       is the content of the row.
+    */
+    {
+      var ol = document.createElement('ol');
+      for (var i = 0; i < json.feed.entry.length; i++)
+      {
+        var entry = json.feed.entry[i];
+        var sheet = document.createTextNode(entry.title.$t);
+        var li    = document.createElement('li');
+        li.appendChild(sheet);
+        ol.appendChild(li);
+      }
+      document.getElementById('data').appendChild(ol);
+    }
+
+
+
+    function sendAndDraw()
+    {
+      query_obj.send(handleQueryResponse); // send the query with a callback function
+    }
+
+
+
+    // usage of the visualization
+    function handleQueryResponse(response)
+    {
+      if (response.isError())
+      {
+        alert('Error in query:\n\n' + response.getMessage() + '\n' + response.getDetailedMessage());
+        return;
+      }
+      data = response.getDataTable();
+      var list_obj = new view.out(document.getElementById(list_id));
+      list_obj.draw(data);
+    }
+
+
+
+    // out class constructor
+    view.out = function(container)
+    // container: the HTML element where the visualization will be rendered in
+    {
+      this.containerElement = container; // stores the container HTML element
+    }
+
+
+
+    // out.draw() method
+    view.out.prototype.draw = function(data)
+    // data: the google.visualization.DataTable to display
+    {
+      var html = [];
+      var wp_i = 'http://en.wikipedia.org/favicon.ico';
+      var go_i = 'http://www.google.com/favicon.ico';
+      for (var row = 0; row < data.getNumberOfRows(); row++)
+      {
+        var name  = data.getFormattedValue(row,0);
+        var id    =                                   name.replace(' ','-').toLowerCase();
+        var wp_u  = 'http://pt.wikipedia.org/wiki/' + name.replace(' ','_');
+        var go_u  = 'http://google.com/images?q='   + name.replace(' ','+') + '+art';
+        var code  = '<li>'
+            code += '<a href="' + wp_u + '" target="_blank"><img src="' + wp_i + '" style="margin-right:10px;" /></a>';
+            code += '<a href="' + go_u + '" target="_blank" id="' + id + '" onmouseover="preview(\'' + id + '\',\'' + name + '\')"><img src="' + go_i + '" style="margin-right:5px;" />' + name + '</a>';
+            code += '</li>';
+        html.push(code);
+      }
+      this.containerElement.innerHTML = html.join('');
+    }
+
+
+
+    function preview(id, search_keys)
+    {
+      tooltip.show('<div id="'+content+'"></div>');
+      var imageSearch = new google.search.ImageSearch();
+      imageSearch.setResultSetSize(6);
+      imageSearch.setRestriction
+      (
+        google.search.ImageSearch.RESTRICT_IMAGESIZE,
+     // google.search.ImageSearch.IMAGESIZE_MEDIUM
+        google.search.ImageSearch.IMAGESIZE_LARGE
+      );
+      imageSearch.setSearchCompleteCallback(this, searchComplete, [imageSearch]);
+      imageSearch.execute(search_keys);
+      document.getElementById(id).onmouseout = function(){tooltip.hide()};
+    }
+
+
+
+    function searchComplete(searcher)
+    {
+      if (searcher.results && searcher.results.length > 0)
+      {
+        var contentDiv = document.getElementById(content);
+        contentDiv.innerHTML = '';
+        var results = searcher.results;
+        var max_results = results.length;
+     // var max_results = 1;
+        for (var i = 0; i < max_results; i++)
+        {
+          var result = results[i];
+          var newDiv = document.createElement('div');
+          var newImg = document.createElement('img');
+          newImg.src = result.tbUrl;
+          newImg.setAttribute('class','img');
+          newDiv.setAttribute('class','img');
+          newDiv.appendChild(newImg);
+          contentDiv.appendChild(newDiv);
+        }
+      }
+    }
+
+
+
+  </script>
+
+</head>
+
+<body>
+
+<h2>Base de Artistas</h2>
+
+<p>
+  Usando as API's do Google para
+  <a href="http://code.google.com/intl/pt-BR/apis/spreadsheets/data/1.0" target="_blank">Docs (Spreadsheets)</a> e
+  <a href="http://code.google.com/intl/pt-BR/apis/imagesearch/v1/" target="_blank">Pesquisa de Imagens</a>.
+</p>
+
+<p>
+  <b>ATENÇÃO:</b> Altere os dados na
+  <span class="button"><a href="" onmouseover="this.href=sheeturl" target="_blank">Planilha</a></span> (pública) e depois 
+  <b><a href="">recarregue</a></b> essa página.
+</p>
+
+<h2>Folhas</h2>
+
+<div id="data">
+</div>
+
+<h2>Artistas</h2>
+
+<ol id="output">
+</ol>
+
+<p><b>EOF</b></p>
+
+</body>
+
+</html>
